@@ -1,0 +1,108 @@
+   <div class="jumbotron text-center" id="top_jumbotron">
+   	{{#each inventory_items}}
+        	<h1 class="title">{{name}}</h1>
+	{{/each}}
+    </div>
+
+    <div class="text-center"> 
+      <div class="btn-group">
+        <a href="https://fmrs.bucknell.edu/browse_inventory" type="button" class="btn btn-primary">Browse Equipment</a>
+        <a href="https://fmrs.bucknell.edu/suiteInfoPage" type="button" class="btn btn-primary">Browse Studio</a>
+      </div>
+    </div>
+
+    <div class = "container">
+    	 <div class = "row"> 
+        <table>
+		<tbody>
+			{{#each inventory_items}}
+				<tr>
+						<td rowspan="10">
+					    	   <img src="/static/images/camera1.bmp" alt="" style="height:300px;display:flex;margin-left:100px; marigin-top:50px;"/>
+						</td>
+						<td rowspan="10" style="width:30px;">
+						</td>
+                                                <th>
+                                                 
+                                                                <p><h2>{{name}}</h2></p>
+						</th>
+						<tr>
+								<td><p style="color:green;text-align:left;margin-left:5px;">{{id_num}}</p></td>
+						</tr>                                                    
+   						<tr>
+						<td rowspan="8" style="width:450px;text-align:left;">
+                                                                {{description}}
+                                                 
+                                                </td>
+						</tr>
+						<td class "col-xs-8">
+						        <input id ="start_date" type="date" class="form-control" placeholder="mm/dd/yyyy" >Start Date</input>
+							<br>
+							<input id ="end_date" type="date" class="form-control" placeholder="mm/dd/yyyy" >End Date</input>
+							<br>
+							<input id = "user_id" class = "form-control" placeholder="userID"/>
+							<br>
+							<input type="button" class="btn btn-primary"  id="create_item_request" value="Request Item" style="width: 100%;"/>
+							<script>
+								$("#create_item_request").click(function(event){
+									var start_date_str = $("#start_date").val();
+									var end_date_str = $("#end_date").val();
+									var user_id_str = $("#user_id").val();
+									var item_id_str = "{{id_num}}";
+									var prim_key_str = user_id_str + item_id_str; 
+							
+									console.log("Text A: " + start_date_str);
+									console.log("Text B: " + end_date_str);
+									console.log("Text C: " + user_id_str);
+
+									var postData = {start_date: start_date_str, end_date:end_date_str, user_id: user_id_str, item_id:item_id_str, prim_key: prim_key_str};
+									var stringify_data = JSON.stringify(postData);								
+									console.log("stringify_data: " + stringify_data);
+									$.ajax({
+										url: "/admin_request_item",
+										type: "POST",
+										data: stringify_data,
+										contentType: 'application/json',
+										success:function(data){alert("request made");},
+										error:function(){console.log("error");}		
+										});
+									event.preventDefault();
+									});
+							</script>
+              
+		<br>
+    			{{/each}}
+			</tbody>
+			</table>		
+	</div>
+ 
+				<div class="text-center">
+				<p> Recommended Items </p> 
+      				     <div class="btn-group">
+				     	  {{#each linked_item}}
+        			     	  <a href="https://fmrs.bucknell.edu/admin/check_out_item/{{id_num}}" type="button" class="btn btn-primary">{{name}}</a>
+					  {{/each}}
+      				     </div>
+			     </div>
+				
+    		
+    <br>
+    <br>
+    </div>
+    </div>
+</div>
+		
+		<!--
+               <input id="date_picker_element" type="date" class="form-control" placeholder="mm/dd/yyyy" >
+	       
+               <input type="time" class="form-control" placeholder="HH:MM AM or HH:MM PM" id="beginTimeField"><br>
+	       -->
+
+
+<script>
+
+	var date_picker_value = $("#date_picker_element").val();
+
+	var begin_time_field = $("#beginTimeField").val();
+
+</script> 

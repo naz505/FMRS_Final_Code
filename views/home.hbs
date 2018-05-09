@@ -1,0 +1,124 @@
+   <style src="https://fmrs.bucknell.edu/static/css/style.css"> 
+  </style>
+  
+  <script>console.log("user_is_admin: {{user_is_admin}}");</script>
+  <div class="jumbotron text-center" id="top_jumbotron">
+        <h1 class="title">Film & Media Department Equipment</h1>
+    </div>
+
+    <div class="text-center"> 
+      <div class="btn-group">
+	<!-- Pointing the btn group toggle to the proper https://fmrs.bucknell.edu/.... global absolute address -->
+        <a href="https://fmrs.bucknell.edu/browse_inventory" type="button" class="btn btn-primary">Browse Equipment</a>
+        <a href="https://fmrs.bucknell.edu/studioInfoPage" type="button" class="btn btn-primary">Browse Studio</a>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+            <div class="col-sm-7">
+                <h3>Inventory </h3>
+		
+                <div class="span12" style="border: 2px solid black">
+		<style>
+		       .table-fixed tbody {
+			  height: 230px;
+			  overflow-y: scrollable;
+			  width: 100%;
+			}
+		       
+		</style>
+		
+                <table class="table" >
+                        <tbody>
+                                {{#each inventory_items}}
+                                        <tr>
+						<td class="col-xs-1">
+					    	    <img src={{image_url}} alt="" style="height:150px;display:flex;"/>
+						</td>
+                                                <td class= "col-xs-6">
+                                                        <div class = "row">
+                                                                <p>{{name}}</p>
+                                                        </div>
+                                                        <div class = "row">
+                                                                {{description}}
+                                                        </div>
+                                                </td>
+						<td class="col-xs-1">
+						    <a href="item_detail/{{id_num}}" type="button" class="btn btn-primary">See More</a> 
+						</td>
+                                                
+                                        </tr>
+                                {{/each}}
+                        </tbody>
+                </table>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <h3>Studio Space</h3>
+                    <div class="span12" style="border: 2px solid black">
+                        <p> There are 3 Suites available in the studio Space: </p>
+			<br>
+			<p> The Editing Suite - contains computers with post production software.</p>
+			<br> 
+			<p> The Mixing Suite - A room designed to help students mix and build post prooduction works. It has the ability to look at multiple media formats. </p>
+			<br> 
+			<p> The Studio - A versitile environment for audio and video recording. Has many built in tools and features to assist with recording. </p>
+
+                        <div class='btn-toolbar pull-right'>
+			     <a href="suiteInfoPage">See More</a>
+                        </div>
+
+                    </div>
+            </div>
+      </div>
+    </div>
+		
+
+
+
+<script>
+
+
+	// insert calendar js & insert inventory table js  
+
+
+</script>
+
+
+<script>
+	// stuff pertaining to top buttons, & username extraction
+	// from user_data.cookie  (useful for routes like 'https://fmrs.bucknell.edu/'
+	// where the interaction is not wrapped in the forced user-authentication 
+	// 
+	// -Andrew Nyhus
+        //================================================
+	var username_from_cookie = "";
+	if("{{user_data.cookie}}"){
+		username_from_cookie = "{{user_data.cookie}}".split(" ")[0].split(";")[1];
+		var curr_index = 0;
+		var alphabet_lower = "abcdefghijklmnopqrstuvwxyz";
+		var lowest_index = username_from_cookie.length;
+		while(curr_index < alphabet_lower.length){
+			var curr_letter = alphabet_lower[curr_index];
+			if(username_from_cookie.indexOf(curr_letter) != -1 && username_from_cookie.indexOf(curr_letter) < lowest_index){
+				lowest_index = username_from_cookie.indexOf(curr_letter);
+			}
+			curr_index += 1;
+		}
+		console.log("lowest_index: " + lowest_index);
+		username_from_cookie = username_from_cookie.substring(lowest_index, username_from_cookie.length);
+		console.log("username_from_cookie:" + username_from_cookie);
+	}
+
+	if(username_from_cookie != ""){
+		$("#cart_button").attr('href', "https://fmrs.bucknell.edu/user/" + username_from_cookie + "/cart");
+        	$("#user_profile_button").attr('href', "https://fmrs.bucknell.edu/user/" + username_from_cookie ); 	
+	
+	}else{
+		$("#cart_button").hide();
+		$("#user_profile_button").hide();
+	}
+
+	//================================================
+</script>

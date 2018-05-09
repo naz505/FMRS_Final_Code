@@ -1,0 +1,98 @@
+
+    <div class="jumbotron text-center" id="top_jumbotron">
+        <h1 class="title">Your Cart</h1>
+    </div>
+
+    <div class="text-center">
+      <div class="btn-group">
+        <a href="browse_inventory" type="button" class="btn btn-primary">Browse Equipment</a>
+        <a href="studioInfoPage" type="button" class="btn btn-primary">Browse Studio</a>
+      </div>
+   <p></p>
+    </div>
+	
+        <div class="text-center" style="align:center;"> 
+    	
+        <table style="width:100%; margin-left:50px; margin-right: 50px ">
+                        <tbody style = "overflow:scrollable;width:100%">
+                                {{#each cart_items}}
+					<script>
+						console.log(" {{this}} ");
+					</script>
+					 <tr>
+						<td class="col-xs-1">
+					    	    <img src={{image_url}} alt="" style="height:150px;display:flex;"/>
+						</td>
+                                                <td class= "col-xs-6">
+                                                        <p>{{name}}</p>
+							<p>ID#: {{id_num}}</p>
+							<p>Description: </p>
+							<p>{{description}}</p>
+							<p>From {{reservation_start}} to {{reservation_end}}</p>
+							<br>
+							<br>
+                                                        
+                                                </td>
+                                                <td class= "col-xs-1"> 
+							<input type="button" id="{{req_id}}_delete_req" value="remove from cart">
+							<script>
+								$("#{{req_id}}_delete_req").click(function(event){
+									var postData = {user_id: "{{user_id}}",req_id:"{{req_id}}"};
+									var stringify_data = JSON.stringify(postData);	
+					
+									$.ajax({
+										url: "/delete_cart_req",
+										type: "POST",
+										data: stringify_data,
+										contentType: 'application/json',
+										success:function(data){alert("item deleted");},
+										error:function(){console.log("error");}
+									});
+				
+		
+								event.preventDefault();
+
+								});
+							</script>
+						</td>
+						<td class= "col-xs-1">
+						</td>
+                                        </tr>
+					<input type="text" id="user{{req_id}}" value="{{user_id}}">
+					<script>
+						$("#user{{req_id}}").hide();
+					</script>
+				{{/each}}
+                        </tbody>
+                </table>
+		<input type="button" class="btn btn-primary"  id="submitCartButton" value="Submit Cart" style="width: 50%;">
+	
+		<script>
+			$("#submitCartButton").click(function(event){
+				<!--
+				var url_segments = window.location.href.split('/');
+				var user_id = url_segments[ url_segments.length-1 ];
+				-->
+				var postData = {user_id: "{{user_id}}"};
+					
+				var stringify_data = JSON.stringify(postData);	
+		
+				
+				$.ajax({
+					url: "/submit_cart",
+					type: "POST",
+					data: stringify_data,
+					contentType: 'application/json',
+					success:function(data){alert("cart submitted");},
+					error:function(){console.log("error");}
+				});
+				
+		
+			event.preventDefault();
+
+		});
+		</script>
+    </div>
+
+
+

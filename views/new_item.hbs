@@ -1,0 +1,125 @@
+
+<div class="text-center"> 
+        <div id="top_jumbotron" class="jumbotron text-center" >
+             	     <h1 class="title">New Item</h1>
+	</div>
+</div>
+    <div class="text-center">
+      <div class="btn-group">
+        <a href="https://fmrs.bucknell.edu/browse_inventory" type="button" class="btn btn-primary">Browse Equipment</a>
+        <a href="https://fmrs.bucknell.edu/suiteInfoPage" type="button" class="btn btn-primary">Browse See Studio/a>
+      </div>
+    </div>
+    <div class = "text-center">
+        <table class = "table table-fixed">
+		<tbody style = "height:300px;overflow:scrollable;width:100%">
+                                
+                                        <tr>
+						
+						<td class="col-xs-2">
+					    	    <!--<img src={{image_url}} alt="" style="height:150px;display:flex;"/>-->
+						</td>
+						
+                                                <td class= "col-xs-4">
+                                                        <div class = "row">							     	  
+							      	    <p> Name: </p>
+                					      	    <input class="form-control"  type="text" id="textA" placeholder="name" width "90%" required>
+								    <p> ID: </p>
+								    <input class="form-control"  type="text" id="textB" placeholder="id#(5 digits)" width="90%">
+								    <p> Category: </p>
+								    <form>
+								    {{#each categories}}
+									<label class="radio-inline">
+								    	       <input type="radio" name="optradio" value="{{cat_id}}">{{name}}</input>
+								    	</label>
+								    {{/each}}
+								    </form>
+								    <p> Description: </p>
+								    <input class="form-control"  type="text" id="textC" width="90%">
+								    
+								    <p> item_link_one: </p>
+								    <input class="form-control"  type="text" id="item_link_one" placeholder="id#(5 digits)" width="90%">
+								    <p> item_link_two: </p>
+								    <input class="form-control"  type="text" id="item_link_two" placeholder="id#(5 digits)" width="90%">
+								    <p> item_link_three: </p>
+								    <input class="form-control"  type="text" id="item_link_three" placeholder="id#(5 digits)" width="90%">
+
+								</body>
+								<br>
+								<br>
+                                                       </div>
+                                                </td>
+						<td class= "col-xs-2">
+						</td>
+                                        </tr>
+                           
+                        </tbody>
+    		</table>
+	<input type="button" class="btn btn-primary"  id="createNewItemButton" value="Insert New Item" style="width: 33%">
+	<script>-
+
+	$("#createNewItemButton").click(function(){
+			var text_input_4 = $('input[name="optradio"]:checked').val();
+			var text_input = $("#textA").val();
+			var text_input_2 = $("#textB").val();
+			var text_input_3 = $("#textC").val(); 
+			console.log("Text A: " + text_input);
+			console.log("Text B: " + text_input_2);
+			console.log("Text C: " + text_input_3);
+
+			
+
+			var postData = {name: text_input, id:text_input_2, desc: text_input_3, cat: text_input_4 };
+			var stringify_data = JSON.stringify(postData);		
+			var a = $("#item_link_one").val();
+			var b = $("#item_link_two").val();
+			var c = $("#item_link_three").val();
+			postData2 = {id_num: text_input_2, id_link_one: a, id_link_two: b, id_link_three: c};
+			var stringify_data2 = JSON.stringify(postData2);
+		
+			if (text_input_2.length != 5 ) { // wrong name length
+				alert ("Invalid id length");
+			} else if (!(a.length == 5 )){ // item link one
+				alert ("Invalid length for id_link_one");
+			} else if (!(b.length == 5 )){ // item link two
+				alert ("Invalid length for id_link_two");
+			} else if (!(c.length == 5 )){ // item link three
+				alert ("Invalid length for id_link_three");
+			} else if (text_input.length == 0) {
+				alert ("Name field can't be empty");
+			} else if ($('input[name=optradio]:checked').val() == undefined){
+				alert("Please select a category.");
+			} else {
+				$.ajax({
+					url:"/create_item_links",
+					type: "POST",
+					data: stringify_data2,
+					contentType: 'application/json',
+					success:function(data){},
+					error:function(data){
+						alert("error (check console)");
+						console.log(data);
+					}
+				});
+				$.ajax({
+					url: "/create_item",
+					type: "POST",
+					data: stringify_data,
+					contentType: 'application/json',
+					success:function(data){
+						alert("item created");
+						console.log(data);
+					},
+					error:function(data){
+						alert("error (check console)");
+						console.log(data);
+					}	
+				});
+			}
+            });
+	    </script>
+    </div>
+
+
+    
+    

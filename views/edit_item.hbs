@@ -1,0 +1,127 @@
+
+<div class="text-center"> 
+        <div id="top_jumbotron" class="jumbotron text-center" >
+	     {{#each inventory_items}}
+             	     <h1 class="title">{{item_name}}</h1>
+   	     {{/each}}
+	</div>
+</div>
+    <div class="text-center">
+      <div class="btn-group">
+        <a href="https://fmrs.bucknell.edu/browse_inventory" type="button" class="btn btn-primary">Browse Equipment</a>
+        <a href="https://fmrs.bucknell.edu/suiteInfoPage" type="button" class="btn btn-primary">Browse Studio</a>
+      </div>
+    </div>
+   
+ <div class = "text-center">
+        <table class = "table table-fixed">
+		<tbody style = "height:300px;overflow:scrollable;width:100%">
+                     
+                                        <tr>
+						
+						<td class= "col-xs-2">
+						</td>
+                                                <td class= "col-xs-4">
+                                                        <div class = "row">	
+							     	   {{#each inventory_items}}						     	  
+							      	    <p> Name: {{name}} </p>
+                					      	    <input class="form-control"  type="text" id="textA" placeholder="name" width ="90%" value = "{{name}}">
+								    
+								    <p> ID: {{id_num}} <p>
+								    <input class="form-control"  type="text" id="textB" placeholder="id#(5 digits)" width="90%" value = "{{id_num}}">
+								    
+								    <p> Description: {{description}} </p>
+								    <input class="form-control"  type="text" id="textC" width="90%" value = "{{description}}">
+								    
+								    <script>
+									var cat = "{{category}}";
+									
+								    </script> 
+								    
+								    {{/each}}
+
+								    <p> Category:{{cat}} </p>
+								    <form id="categories_radio_form">
+								      {{#each categories}}
+								        
+									<label class="radio-inline">
+								    	       <input type="radio" name="optradio" value="{{cat_id}}" id = "radio_button_{{cat_id}}">{{name}}</input>
+								    	</label>
+								      	<script>
+										console.log("cat_id:" + "{{cat_id}}");
+										console.log("item_cat:" + cat); 
+										var cat_temp = "{{cat_id}}";
+										if (cat_temp == cat){
+										      $("#radio_button_{{cat_id}}").prop('checked',true); 
+										   }
+										
+									</script>
+								    {{/each}}
+								    </form>
+	    
+								    {{#each item_link}}
+								    <p> item_link_one: </p>
+								    	<input class="form-control"  type="text" id="item_link_one_form" width="90%" placeholder="id#(5 digits)" value="{{item_link_1}}">
+								    <p> item_link_two: </p>
+								    	<input class="form-control"  type="text" id="item_link_two_form" placeholder="id#(5 digits)" width="90%" value="{{item_link_2}}" >
+								    <p> item_link_three: </p>
+								    	<input class="form-control"  type="text" id="item_link_three_form" placeholder="id#(5 digits)" width="90%" value = "{{item_link_3}}">
+								    {{/each}}
+							
+								<br>
+								<br>
+                                                       </div>
+                                                </td>
+						<td class= "col-xs-2">
+						</td>
+                                        </tr>
+                        </tbody>
+    		</table>
+	<input type="button" class="btn btn-primary"  id="editItemButton" value="Edit Item" style="width: 25%;">
+
+	<script>
+
+	    $("#editItemButton").click(function(){
+
+			
+			var text_input_4 = $('input[name="optradio"]:checked').val();
+			var text_input = $("#textA").val();
+			var text_input_2 = $("#textB").val();
+			var text_input_3 = $("#textC").val(); 
+			var id_link_one_text = $("#item_link_one_form").val();
+			var id_link_two_text = $("#item_link_two_form").val();
+			var id_link_three_text = $("#item_link_three_form").val();
+			var postData = {name: text_input, id: text_input_2, desc: text_input_3, id_link_one: id_link_one_text, id_link_two: id_link_two_text, id_link_three: id_link_three_text, cat:text_input_4};
+			var stringify_data = JSON.stringify(postData);
+			
+
+			if (text_input_2.length != 5 ) { // wrong name length
+				alert ("Invalid id length");
+			} else if (!(id_link_one_text.length == 5 )){ // item link one
+				alert ("Invalid length for id_link_one");
+			} else if (!(id_link_two_text.length == 5 )){ // item link two
+				alert ("Invalid length for id_link_two");
+			} else if (!(id_link_three_text.length == 5 )) { // item link three
+				alert ("Invalid length for id_link_three");
+			} else if (text_input.length == 0) {
+				alert ("Name field can't be empty");
+			} else if ($('input[name=optradio]:checked').val() == undefined){
+				alert("Please select a category.");
+			} else {
+			  $.ajax({
+				url: "/edit_item",
+				type: "POST",
+				data: stringify_data,
+				contentType: 'application/json',
+				success:function(data){alert("item updated");},
+				error:function(){console.log("error");}	
+				});
+			}
+			event.preventDefault();
+            });
+	    </script>
+    </div>
+
+
+    
+    
