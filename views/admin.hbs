@@ -1,0 +1,246 @@
+
+    <div class="jumbotron text-center" id="top_jumbotron">
+        <h1 class="title">Hi, Manager!</h1>
+    </div>
+
+    <div class="text-center"> 
+      <div class="btn-group">
+        <button type="button" id="see_requests_button" class="btn btn-primary">See Requests</button>
+        <button type="button" id="manage_inventory_button" class="btn btn-primary">Manage Inventory</button>
+      </div>
+    </div>
+    <p></p>
+
+
+
+    <div id="manage_inventory_table" class="container">
+      <div class="row">
+            <div>
+                <div class="span12" style="border: 2px solid black">
+                        <table class="table table fixed">
+                        <thead>
+                                <tr> 
+                                     <td class = "col-xs-1"> 
+                                         <p> ID# </p>
+                                     </td>
+                                     <td class = "col-xs-1"> 
+                                         <p> Name </p>
+                                     </td>
+                                     <td class = "col-xs-1">
+                                         <p>Status(in/out)</p>
+                                     </td>
+                                     <td class = "col-xs-8">
+                                         <p></p>
+                                     </td>
+                                     <td class = "col-xs-1">
+                                         <a href="https://fmrs.bucknell.edu/admin/new_item" type="button" class="btn btn-primary pull-right" width="50%">Create New Item</a>
+                                     </td>
+
+
+                                </tr>
+                                        
+                        </thead>
+                        
+                        <tbody style = "height:300px;overflow:scrollable;width:100%">
+                                {{#each inventory_items}}
+                                        <tr>
+                                                                                <td class="col-xs-1">
+                                                                                    <p>{{id_num}} </p>
+                                                                                </td>
+                                                                                <td class="col-xs-1">
+                                                                                    <p> {{name}} </p>
+                                                                                </td>
+                                                                                <td class="col-xs-1">
+                                                                                    <p> {{reserve_status}} </p>
+                                                                                </td>
+                                                                                <td class="col-xs-1">
+                                                                                    <p></p>
+                                                                                </td>
+                                                                                <td class="col-xs-1">
+                                                                                    <p></p>
+                                                                                </td>
+                                                                                <td class="col-xs-1">
+                                                                                    <a href="https://fmrs.bucknell.edu/item_detail/{{id_num}}" type="button">See More</a>
+                                                                                </td>
+                                                                                
+                                                                                <td class="col-xs-1">
+                                                                                    <a href="https://fmrs.bucknell.edu/admin/edit_item/{{id_num}}" type="button" class="btn btn-primary">Edit</a> 
+                                                                                </td>
+                                                                                <td class="col-xs-1">
+                                                                                    <a href="https://fmrs.bucknell.edu/admin/check_out_item/{{id_num}}" type="button" class="btn btn-primary">Check Out</a> 
+                                                                                </td>
+                                                                                <td class="col-xs-1">
+                                                                                    <input type = "button" class=" btn btn primary" id = "{{id_num}}_delete" value="Delete">
+                                                                                </td>   
+                                                                                
+                                                                                <script>
+                                                                                $("#{{id_num}}_delete").click(function(event){
+                                                                                
+                                                                                var postData = {id:"{{id_num}}"};
+                                                                                
+                                                                                var stringify_data = JSON.stringify(postData);                                  
+                                                                                console.log("stringify_data: " + stringify_data);
+                                                                                
+
+                                                                                $.ajax({
+                                                                                url: "/delete_item",
+                                                                                type: "POST",
+                                                                                data: stringify_data,
+                                                                                contentType: 'application/json',
+                                                                                success:function(data){alert("item deleted");},
+                                                                                error:function(){console.log("error");}
+                                                                                });
+                                                                                
+                                                                                event.preventDefault();
+
+                                                                                console.log("deleting item: {{id_num}}");
+                                                                                });
+                                                                                </script>
+                                                                
+                                        </tr>
+                                {{/each}}
+                        </tbody>
+                </table>
+                
+                </div>
+        </div>
+        </div>
+        </div>
+
+                <!-- End Inventory Table -->
+
+    <div id="see_requests_table" class="container">
+      <div class="row">
+            <div>
+                <div class="span12" style="border: 2px solid black">
+                     <div class = "btn-group" style="width:100%;">
+                        </div>
+                        <table class="table table fixed">
+                        <thead>
+                                <tr> 
+                                     <td class = "col-xs-1"> 
+                                         <p> ID# </p>
+                                     </td>
+                                     <td class = "col-xs-1"> 
+                                         <p> Name </p>
+                                     </td>
+                                     <td class = "col-xs-1"> 
+                                         <p> Status(in/out) </p>
+                                     </td>
+                                     <td class = "col-xs-1"> 
+                                         <p> Who </p>
+                                     </td>
+                                     <td class = "col-xs-1"> 
+                                         <p> Start Date </p>
+                                     </td>
+                                     <td class = "col-xs-1"> 
+                                         <p> End Date </p>
+                                     </td>
+                                </tr>   
+                        </thead>
+                        
+                        <tbody style = "overflow:scrollable;width:100%">
+                                {{#each request_items}}
+                                        <tr>
+                                                <td class="col-xs-1">
+                                                    <p>{{id_num}} </p>
+                                                </td>
+                                                <td class="col-xs-1">
+                                                    <p> {{name}} </p>
+                                                </td>
+                                                <td class="col-xs-1">
+                                                    <p>{{inventory_in}} </p>
+                                                </td>
+                                                <td class="col-xs-1">
+                                                    <p> {{user_id}}</p>
+                                                <td class="col-xs-1">
+                                                    {{reservation_start}}
+                                                </td>
+                                                <td class = "col-xs-1"> 
+                                                    {{reservation_end}}
+                                                </td>   
+                                                <td class="col-xs-1">
+                                                    <input type = "button" class=" btn btn primary" id = "{{id_num}}_approve" value="Approve Request" width="33%">
+                                                </td>
+                                                <td class="col-xs-1">
+                                                    <input type = "button" class=" btn btn primary" id = "{{id_num}}_check_in" value="Check In" width="33%">
+                                                </td>
+                                                <td class="col-xs-1">
+                                                    <input type = "button" class=" btn btn primary" id = "{{id_num}}_check_out" value="Check Out" width="33%">
+                                                </td>
+                                                
+                                                <script>
+                                                        $("#{{id_num}}_approve").click(function(event){
+                                                                var postData = {id:"{{req_id}}"};
+                                                                var stringify_data = JSON.stringify(postData);                                                  
+                                                                console.log("request approved stringify_data: " + stringify_data);
+                                                                $.ajax({
+                                                                        url: "/approve_request",
+                                                                        type: "POST",
+                                                                        data: stringify_data,
+                                                                        contentType: 'application/json',
+                                                                        success:function(data){alert("request_approved");},
+                                                                        error:function(){console.log("error");}
+                                                                });
+                                                                event.preventDefault();
+                                                        });
+                                                        $("#{{id_num}}_check_in").click(function(event){
+                                                                var postData = {id:"{{id_num}}", primary_key:"{{req_id}}"};
+                                                                var stringify_data = JSON.stringify(postData);                                                  
+                                                                console.log("check in stringify_data: " + stringify_data);
+                                                                $.ajax({
+                                                                        url: "/check_in_item",
+                                                                        type: "POST",
+                                                                        data: stringify_data,
+                                                                        contentType: 'application/json',
+                                                                        success:function(data){alert("{{name}} checked in");},
+                                                                        error:function(){console.log("error");}
+                                                                });
+                                                                event.preventDefault();
+                                                        });
+                                                        $("#{{id_num}}_check_out").click(function(event){
+                                                                var postData = {id:"{{id_num}}"};
+                                                                var stringify_data = JSON.stringify(postData);                                                  
+                                                                console.log("check out stringify_data: " + stringify_data);
+                                                                $.ajax({
+                                                                        url: "/check_out_item",
+                                                                        type: "POST",
+                                                                        data: stringify_data,
+                                                                        contentType: 'application/json',
+                                                                        success:function(data){alert("{{name}} checked out");},
+                                                                        error:function(){console.log("error");}
+                                                                });
+                                                                event.preventDefault();
+                                                        });
+                                                </script>
+                                                                
+                                        </tr>
+                                {{/each}}
+                        </tbody>
+                </table>
+                </div>
+        </div>
+</div>
+</div>
+        <br>
+        <br>
+
+                <!-- End See Requests  Table -->
+        <script>
+
+                $("#manage_inventory_table").hide();
+                $("#see_requests_table").show();
+                $("#manage_inventory_button").click(function(){
+                        $("#manage_inventory_table").show();
+                        $("#see_requests_table").hide();
+                });
+
+
+                $("#see_requests_button").click(function(){
+                        console.log("show requests");
+                        $("#manage_inventory_table").hide();
+                        $("#see_requests_table").show();        
+                });
+
+        </script>
+
